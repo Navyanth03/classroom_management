@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id        Int        @id @default(autoincrement())
+  userName  String     @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role
+  Teacher   Teacher?   @relation("TeacherUser")
+  Student   Student?   @relation("StudentUser")
+  Principal Principal? @relation("PrincipalUser") 
+}
+
+model Principal {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique
+  User     User   @relation("PrincipalUser",fields: [userId], references: [id],onDelete: Cascade)
+}
+
+model Teacher {
+  id          Int         @id @default(autoincrement())
+  userId      Int         @unique
+  User        User        @relation("TeacherUser", fields: [userId], references: [id],onDelete: Cascade)
+  Classroom   Classroom?   @relation("ClassroomTeacher")
+  Students    Student[]
+}
+
+model Student {
+  id          Int         @id @default(autoincrement())
+  userId      Int         @unique
+  teacherId   Int?        // Optional
+  User        User        @relation("StudentUser", fields: [userId], references: [id],onDelete: Cascade)
+  Teacher     Teacher?    @relation(fields: [teacherId], references: [id],onDelete: SetNull)
+}
+
+model Classroom {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  startTime   Int
+  endTime     Int
+  teacherId   Int?         @unique
+  Teacher     Teacher?     @relation("ClassroomTeacher",fields: [teacherId], references: [id],onDelete: Cascade)
+  Classes     Class[]      // One-to-many relationship with Class
+}
+
+model Class {
+  id          Int         @id @default(autoincrement())
+  subject     String
+  startTime   String
+  endTime     String
+  classroomId Int
+  Classroom   Classroom   @relation(fields: [classroomId], references: [id],onDelete: Cascade)
+}
+
+enum Role {
+  PRINCIPAL
+  TEACHER
+  STUDENT
+}
