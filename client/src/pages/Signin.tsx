@@ -1,16 +1,33 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import Header from '../components/Header';
 import InputBox from '../components/InputBox';
 import ButtonComponent from '../components/ButtonComponent';
 
 const SignIn= () => {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState("PRINCIPAL");
+  const [userName, setUserName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [role, setRole] = useState<string>("PRINCIPAL");
+  // const [loadind,isLoading]=useState<boolean>(true);
   const [err,setErr]=useState(false);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    async function isLoggedIn(){
+      const response=await axios.get('https://classroom-management-server.onrender.com/api/v1/user/auth',{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      const level:string=response.data.level;
+      console.log(level);
+      if(level!=null){
+        navigate('/dashboard')
+      }
+    }
+    isLoggedIn();
+  },[])
 
   const handleSignIn = async() => {
     try {

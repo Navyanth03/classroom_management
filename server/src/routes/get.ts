@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/middleware';
 import CustomRequest from '../interfaces/interface';
@@ -20,7 +20,7 @@ router.get('/principals',authMiddleware, async (req: CustomRequest, res: Respons
     const principals=await prisma.principal.findMany({
       where:{}
     })
-  return res.status(404).json({principals});
+  return res.status(200).json({principals});
   }
   return res.status(404).json({msg:"cannot access"});
 });
@@ -37,7 +37,7 @@ router.get('/teachers',authMiddleware, async (req: CustomRequest, res: Response)
     const teachers=await prisma.teacher.findMany({
       where:{}
     })
-  return res.status(404).json({teachers});
+  return res.status(200).json({teachers});
   }
   return res.status(404).json({msg:"cannot access"});
 });
@@ -52,7 +52,7 @@ router.get('/students',authMiddleware, async (req: CustomRequest, res: Response)
   const students=await prisma.student.findMany({
     where:{}
   })
-  return res.status(404).json({students});
+  return res.status(200).json({students});
 });
 
 router.get('/classroom',authMiddleware, async (req: CustomRequest, res: Response) => {
@@ -67,7 +67,7 @@ router.get('/classroom',authMiddleware, async (req: CustomRequest, res: Response
     const classrooms=await prisma.classroom.findMany({
       where:{}
     })
-  return res.status(404).json({classrooms});
+  return res.status(200).json({classrooms});
   }
   return res.status(404).json({msg:"cannot access"});
 });

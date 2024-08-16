@@ -1,7 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 
 
 const Dashboard= () => {
@@ -24,7 +22,7 @@ const Dashboard= () => {
         console.log(response1,response2);
         setStudents(response2.data.students);
       } catch (error) {
-        console.log("error");
+        console.log(error);
       }
     }
     DB();
