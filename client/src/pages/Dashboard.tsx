@@ -1,39 +1,56 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Principal from '../components/Dashboard/Principal';
+import Teacher from '../components/Dashboard/Teacher';
+import Student from '../components/Dashboard/Student';
+import { useNavigate } from 'react-router-dom';
 
 
 const Dashboard= () => {
-  const [teachers,setTeachers]=useState<any>([]);
-  const [students,setStudents]=useState<any>([]);
+  const navigate=useNavigate();
+  const [level,setLevel]=useState<number>();
+  const [isLoading,setIsLoading]=useState<boolean>(true);
   useEffect(()=>{
     async function DB(){
       try {
-        const response1=await axios.get('https://classroom-management-server.onrender.com/api/v1/get/teachers',{
+        const res=await axios.get('https://classroom-management-server.onrender.com/api/v1/user/auth',{
           headers:{
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         });
-        setTeachers(response1.data.teachers);
-        const response2=await axios.get('https://classroom-management-server.onrender.com/api/v1/get/students',{
-          headers:{
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        console.log(response1,response2);
-        setStudents(response2.data.students);
+        setLevel(res.data.level);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        navigate('/signin');
       }
     }
     DB();
   },[])
-  return(
-    <div>
-      hsdshdsd
-      {teachers.map((val:any)=><div>Teacher:{val.id}</div>)}
-      {students.map((val:any)=><div>Student:{val.id}</div>)}
-    </div>
-  )
+
+  if(isLoading){
+    return (
+      <div className='flex justify-center min-h-screen items-center'>
+        <div>Loading....</div>
+      </div>
+    )
+  }
+
+  if(level===0){
+    return(
+      <Principal/>
+    )
+  }else if(level===1){
+    return(
+      <Teacher/>
+    )
+  }else if(level===2){
+    return(
+      <Student/>
+    )
+  }
+
+
 }
 
 export default Dashboard;

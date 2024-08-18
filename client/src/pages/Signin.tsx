@@ -9,7 +9,7 @@ const SignIn= () => {
   const [userName, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [role, setRole] = useState<string>("PRINCIPAL");
-  // const [loadind,isLoading]=useState<boolean>(true);
+
   const [err,setErr]=useState(false);
   const navigate = useNavigate();
 

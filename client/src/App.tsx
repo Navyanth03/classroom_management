@@ -12,8 +12,9 @@ function App() {
       <Routes>
         <Route path='/' element={<Banner />} />
         <Route path='/landing' element={<Landing/>}/>
-        <Route path='/signup' element={<SignUp/>}/>
-        <Route path='/signin' element={<SignIn/>}></Route>
+        <Route path='/signup/teacher' element={<SignUp userRole='TEACHER'/>}/>
+        <Route path='/signup/student' element={<SignUp userRole='STUDENT'/>}/>
+        <Route path='/signin' element={<SignIn/>}/>
         <Route path='/dashboard' element={<Dashboard />}/>
       </Routes>
     </BrowserRouter>
