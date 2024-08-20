@@ -83,7 +83,7 @@ const SignIn= () => {
           ?  <div>Enter valid Credentials</div>
           :  null
           }
-          <div className='text-center mt-4 bg-slate-500 p-1 rounded-sm'>email : principal@classroom.com , Passwordddd : Admin</div>
+          {role==="PRINCIPAL" && <div className='text-center mt-4 bg-slate-500 p-1 rounded-sm'>email : principal@classroom.com , Passwordddd : Admin</div>}
         </div>
       </div>
     </div>
