@@ -72,4 +72,49 @@ router.get('/classroom',authMiddleware, async (req: CustomRequest, res: Response
   return res.status(404).json({msg:"cannot access"});
 });
 
+router.get('/all',authMiddleware,async(req:CustomRequest,res:Response)=>{
+  const DB=await prisma.classroom.findMany({
+    include:{
+      Teacher:{
+        include:{
+          User:{
+            select:{
+              id:true,
+              userName:true,
+              firstName:true,
+              lastName:true,
+              role:true
+            }
+          },
+          Students:{
+            include:{
+              User:{
+                select:{
+                  id:true,
+                  userName:true,
+                  firstName:true,
+                  lastName:true,
+                  role:true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  const idleClassrooms=await prisma.classroom.findMany({
+    where:{
+      teacherId:null
+    }
+  })
+  
+  const idleStudents=await prisma.student.findMany({
+    where:{
+      teacherId:null
+    }
+  })
+  res.status(200).json({msg:"success",DB,idleClassrooms,idleStudents});
+})
+
 export default router;
